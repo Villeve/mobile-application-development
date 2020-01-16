@@ -1,8 +1,8 @@
 import React, { useState } from "react";
 import { StyleSheet, View, FlatList, Button } from "react-native";
-import { Constants } from "expo";
 import GoalItem from "./components/GoalItem";
 import GoalInput from "./components/GoalInput";
+import LoginScreen from "./screens/LoginScreen";
 
 export default function App() {
   const [courseGoals, setCourseGoals] = useState([]);
@@ -28,22 +28,7 @@ export default function App() {
 
   return (
     <View style={styles.screen}>
-      <Button title="Add new goal" onPress={() => setIsAddMode(true)}></Button>
-      <GoalInput
-        onCancel={cancelModal}
-        visible={isAddMode}
-        onAddGoal={displayEnteredGoal}
-      />
-      <FlatList
-        data={courseGoals}
-        renderItem={itemData => (
-          <GoalItem
-            id={itemData.item.id}
-            onDelete={removeGoal}
-            title={itemData.item.value}
-          />
-        )}
-      />
+      <LoginScreen />
     </View>
   );
 }
