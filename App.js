@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { StyleSheet, View, FlatList, Button } from "react-native";
+import { Constants } from "expo";
 import GoalItem from "./components/GoalItem";
 import GoalInput from "./components/GoalInput";
 
@@ -49,7 +50,7 @@ export default function App() {
 
 const styles = StyleSheet.create({
   screen: {
-    padding: 50
+    marginTop: Expo.Constants.statusBarHeight
   }
 });
 
