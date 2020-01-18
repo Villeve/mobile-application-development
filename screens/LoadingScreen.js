@@ -1,7 +1,22 @@
 import React from 'react';
-import { View, StyleSheet, ActivityIndicator } from 'react-native';
+import { View, StyleSheet, ActivityIndicator, AsyncStorage } from 'react-native';
 
 class LoadingScreen extends React.Component {
+
+    constructor() {
+        super()
+        this.checkToken()
+    }
+
+    checkToken = async () => {
+        const token = await AsyncStorage.getItem("token");
+        if(token) {
+            this.props.navigation.navigate("App")
+        }
+        else {
+            this.props.navigation.navigate("Auth")
+        }
+    }
 
     render() {
         return (

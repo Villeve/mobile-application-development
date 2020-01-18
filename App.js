@@ -5,6 +5,7 @@ import GoalInput from "./components/GoalInput";
 import LoginScreen from "./screens/LoginScreen";
 import DashboardScreen from './screens/DashboardScreen';
 import LoadingScreen from './screens/LoadingScreen';
+import AppContainer from './routes'
 
 export default function App() {
   const [courseGoals, setCourseGoals] = useState([]);
@@ -29,10 +30,9 @@ export default function App() {
   };
 // tutorial: https://www.youtube.com/watch?v=2fJF5RSTT8Y
   return (
-    <View style={styles.screen}>
-      <LoginScreen />
-    </View>
+    <AppContainer />
   );
+
 }
 
 const styles = StyleSheet.create({

@@ -1,7 +1,16 @@
 import React from 'react';
-import { View, Text, StyleSheet, TextInput, TouchableOpacity } from 'react-native';
+import { View, Text, StyleSheet, AsyncStorage, TouchableOpacity } from 'react-native';
 
 class DashboardScreen extends React.Component {
+
+    logout() {
+        AsyncStorage.removeItem("token")
+            .then(
+                res => {
+                    this.props.navigation.navigate('Auth')
+                }
+            )
+    }
 
     render() {
         return (
@@ -11,7 +20,9 @@ class DashboardScreen extends React.Component {
                         Hey user
                     </Text>
                     <TouchableOpacity style={styles.logoutButton}>
-                        <Text style={styles.logoutButtonText}>
+                        <Text style={styles.logoutButtonText}
+                        onPress={() => this.logout()}
+                        >
                             Logout
                         </Text>
                     </TouchableOpacity>
