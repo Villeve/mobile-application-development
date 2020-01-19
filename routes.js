@@ -3,6 +3,7 @@ import { createStackNavigator } from 'react-navigation-stack';
 import LoginScreen from "./screens/LoginScreen";
 import DashboardScreen from './screens/DashboardScreen';
 import LoadingScreen from './screens/LoadingScreen';
+import RegisterScreen from './screens/RegisterScreen';
 
 const BeforeSignin = createStackNavigator({
     Login: {
@@ -12,6 +13,12 @@ const BeforeSignin = createStackNavigator({
 {
     headerMode: "none",
     initialRouteName: "Login"
+})
+
+const OnRegister = createStackNavigator({
+    Register: {
+        screen: RegisterScreen
+    }
 })
 
 const AfterSignin = createStackNavigator({
@@ -26,6 +33,7 @@ const AfterSignin = createStackNavigator({
 
 const AppNavigator = createStackNavigator({
     Auth: BeforeSignin,
+    Register: OnRegister,
     App: AfterSignin,
     LoadingScreen: LoadingScreen
 },

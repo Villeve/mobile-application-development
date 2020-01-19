@@ -9,10 +9,12 @@ import {
 } from "react-native";
 import axios from "axios";
 
-class LoginScreen extends React.Component {
+class RegisterScreen extends React.Component {
   state = {
     username: "",
+    email: "",
     password: "",
+    password2: "",
     loading: false
   };
 
@@ -22,29 +24,35 @@ class LoginScreen extends React.Component {
     });
   }
 
-  login() {
-    const { username, password } = this.state;
+  register() {
+    const { username, email, password, password2 } = this.state;
     if(username && password) {
         const req = {
-            email: username,
-            password: password
+            name: username,
+            email: email,
+            password: password,
+            password2: password2
           };
           this.setState({
               loading: true
           })
           //https://reqres.in/api/login
-          axios.post("https://mobile-app-backend-uva.herokuapp.com/api/users/login", req).then(
+          axios.post("https://mobile-app-backend-uva.herokuapp.com/api/users/register", req).then(
             res => {
               console.warn(res)
               this.setState({
                   loading: false
               })
               AsyncStorage.setItem("token", res.data.token)
+              this.props.navigation.navigate("Auth");
+              /*
             .then(
                 res => {
-                    this.props.navigation.navigate("App");
+                    alert("Account created successfully")
+                    this.props.navigation.navigate("Auth");
                 }
             )
+            */
               //console.warn(res);
               
             },
@@ -53,29 +61,37 @@ class LoginScreen extends React.Component {
               this.setState({
                   loading: false
               })
-              alert("Wrong username or password");
+              alert("Error While Creating Account - Try Again");
             }
           );
     }
     else {
-        alert("Enter username and password")
+        alert("Fill Every Field")
     }
     
   }
 
   render() {
-    const { username, password, loading } = this.state;
+    const { username, email, password, password2, loading } = this.state;
     return (
       <View style={styles.container}>
         <View style={styles.formWrapper}>
-          <Text style={styles.title}>Welcome to the great University App</Text>
           <View style={styles.formRow}>
             <TextInput
               style={styles.textInput}
-              placeholder="Enter Username"
+              placeholder="Enter username"
               placeholderTextColor="#333"
               value={username}
               onChangeText={value => this.onStateChange("username", value)}
+            />
+          </View>
+          <View style={styles.formRow}>
+            <TextInput
+              style={styles.textInput}
+              placeholder="Enter Email"
+              placeholderTextColor="#333"
+              value={email}
+              onChangeText={value => this.onStateChange("email", value)}
             />
           </View>
           <View style={styles.formRow}>
@@ -88,31 +104,36 @@ class LoginScreen extends React.Component {
               onChangeText={value => this.onStateChange("password", value)}
             />
           </View>
+          <View style={styles.formRow}>
+            <TextInput
+              style={styles.textInput}
+              placeholder="Re-enter Password"
+              placeholderTextColor="#333"
+              secureTextEntry={true}
+              value={password2}
+              onChangeText={value => this.onStateChange("password2", value)}
+            />
+          </View>
           <TouchableOpacity
           activeOpacity={0.8}
             style={{
                 ...styles.button,
                 backgroundColor: loading ? "#ddd" : "blue"
             }}
-            onPress={() => this.login()}
+            onPress={() => this.register()}
             disabled={loading}
           >
             <Text style={styles.buttonText}>
-              {loading ? "Loading..." : "Sign in"}
+              {loading ? "Loading..." : "Register"}
             </Text>
           </TouchableOpacity>
-          <Text style={styles.registerText}
-            onPress={() => this.props.navigation.navigate("Register")}
-          >
-              Click to Register
-            </Text>
         </View>
       </View>
     );
   }
 }
 
-export default LoginScreen;
+export default RegisterScreen;
 
 const styles = StyleSheet.create({
   container: {
@@ -131,12 +152,6 @@ const styles = StyleSheet.create({
     height: 40,
     paddingHorizontal: 10
   },
-  title: {
-    textAlign: "center",
-    marginBottom: 20,
-    fontSize: 28,
-    fontWeight: "bold"
-  },
   button: {
     paddingVertical: 10
   },
@@ -145,12 +160,5 @@ const styles = StyleSheet.create({
     color: "#fff",
     fontSize: 15,
     fontWeight: "bold"
-  },
-  registerText: {
-    textAlign: "center",
-    color: "blue",
-    fontSize: 18,
-    fontWeight: "bold",
-    paddingVertical: 10
   }
 });
