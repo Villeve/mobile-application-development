@@ -32,7 +32,6 @@ class LoginScreen extends React.Component {
           this.setState({
               loading: true
           })
-          //https://reqres.in/api/login
           axios.post("https://mobile-app-backend-uva.herokuapp.com/api/users/login", req).then(
             res => {
               console.warn(res)
@@ -40,6 +39,9 @@ class LoginScreen extends React.Component {
                   loading: false
               })
               AsyncStorage.setItem("token", res.data.token)
+              AsyncStorage.setItem("name", res.data.name)
+              AsyncStorage.setItem("role", res.data.role)
+              //AsyncStorage.setItem("username")
             .then(
                 res => {
                     this.props.navigation.navigate("App");
