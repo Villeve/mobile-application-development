@@ -26,13 +26,12 @@ const OnRegister = createStackNavigator({
 })
 
 const AfterSignin = createStackNavigator({
-    Dashboard: {
+    Universities: {
         screen: DashboardScreen
     }
 },
 {
-    headerMode: "none",
-    initialRouteName: "Dashboard"
+    initialRouteName: "Universities"
 })
 
 const OnPressUniversity = createStackNavigator({
@@ -41,7 +40,6 @@ const OnPressUniversity = createStackNavigator({
     }
 },
 {
-    headerMode: "none",
     initialRouteName: "Faculties"
 })
 
@@ -51,7 +49,6 @@ const OnPressFaculty = createStackNavigator({
     }
 },
 {
-    headerMode: "none",
     initialRouteName: "Courses"
 })
 
@@ -71,7 +68,6 @@ const OnPressCourse = createStackNavigator({
     }
 },
 {
-    headerMode: "none",
     initialRouteName: "CourseInfo"
 })
 

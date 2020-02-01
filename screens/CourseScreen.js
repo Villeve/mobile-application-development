@@ -6,8 +6,8 @@ import {
   AsyncStorage,
   TouchableOpacity,
   FlatList,
-  TextInput,
-  Button
+  Button,
+  ImageBackground
 } from "react-native";
 import axios from "axios";
 
@@ -87,8 +87,7 @@ class CourseScreen extends React.Component {
     const { courses, newCourse, role } = this.state;
     
     return (
-      <View style={styles.container}>
-        <Text style={styles.userText}>Courses</Text>
+      <ImageBackground source={require('../assets/cou1.jpg')} style={styles.container}>
         {role === "1" && <Button title="New Course" onPress={() => this.toggleNewCourseScreen(this.props.navigation.state.params.facultyId)}/>}
         <FlatList
             data={courses}
@@ -108,7 +107,7 @@ class CourseScreen extends React.Component {
             </TouchableOpacity>
             )}
       />
-      </View>
+      </ImageBackground>
     );
   }
 }
@@ -117,10 +116,7 @@ export default CourseScreen;
 
 const styles = StyleSheet.create({
   container: {
-    marginTop: 40,
-    height: "100%",
-    //alignItems: "center",
-    //justifyContent: "center"
+    height: "100%"
   },
   dashboardWrapper: {
     textAlign: "center"
@@ -138,7 +134,8 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     flexDirection: "row",
     justifyContent: "space-between",
-    textAlignVertical: "center"
+    textAlignVertical: "center",
+    opacity: 0.8
   },
   inputContainer: {
     flexDirection: "row",

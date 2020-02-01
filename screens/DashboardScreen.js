@@ -7,9 +7,12 @@ import {
   TouchableOpacity,
   FlatList,
   TextInput,
-  Button
+  Button,
+  ImageBackground,
+  StatusBar
 } from "react-native";
 import axios from "axios";
+const images = require("../assets/images")
 
 class DashboardScreen extends React.Component {
   constructor(props) {
@@ -26,7 +29,11 @@ class DashboardScreen extends React.Component {
     await this.getUniversities();
     await this.setUserNameAndType();
   }
-
+  /*
+  async componentDidUpdate() {
+    await this.setUserNameAndType();
+  }
+*/
   async setUserNameAndType() {
     const role = await AsyncStorage.getItem("role");
     const name = await AsyncStorage.getItem("name");
@@ -92,7 +99,7 @@ class DashboardScreen extends React.Component {
   }
 
   render() {
-    const { universities, newUniversity, name, role } = this.state;
+    const { universities, newUniversity, role } = this.state;
     const textAdded = text =>
       this.setState({
         newUniversity: text
@@ -120,17 +127,16 @@ class DashboardScreen extends React.Component {
           alert("Error while adding new university");
         });
     };
+
     return (
-      <View style={styles.container}>
+      <ImageBackground source={require('../assets/uni'+2+'.jpg')} style={styles.container}>
         <View style={styles.dashboardWrapper}>
-          <Text style={styles.userText}>Hey {name}</Text>
           <TouchableOpacity style={styles.logoutButton}>
             <Text style={styles.logoutButtonText} onPress={() => this.logout()}>
               Logout
             </Text>
           </TouchableOpacity>
         </View>
-        <Text style={styles.userText}>Universities</Text>
         {role === "1" && (
           <View style={styles.inputContainer}>
             <TextInput
@@ -163,7 +169,7 @@ class DashboardScreen extends React.Component {
             </TouchableOpacity>
           )}
         />
-      </View>
+      </ImageBackground>
     );
   }
 }
@@ -172,26 +178,16 @@ export default DashboardScreen;
 
 const styles = StyleSheet.create({
   container: {
-    marginTop: 40,
     height: "100%",
-    //alignItems: "center",
-    //justifyContent: "center"
   },
   dashboardWrapper: {
-    //textAlign: "center",
     padding: 10,
     justifyContent: "space-between",
-  },
-  userText: {
-    fontSize: 30,
-    fontWeight: "bold",
-    marginBottom: 10,
   },
   logoutButton: {
     backgroundColor: "red",
     paddingVertical: 10,
-    width: 100,
-    //alignSelf: "center"
+    width: 100
   },
   logoutButtonText: {
     color: "#fff",
@@ -199,6 +195,7 @@ const styles = StyleSheet.create({
     fontWeight: "bold"
   },
   listItem: {
+    opacity: 0.8,
     padding: 10,
     marginVertical: 10,
     backgroundColor: "#ccc",
@@ -218,7 +215,10 @@ const styles = StyleSheet.create({
         width: "80%",
         borderBottomColor: "black",
         borderWidth: 1,
-        padding: 10
+        padding: 10,
+        backgroundColor: "white",
+        opacity: 0.8
+        
     },
   newUniButton: {
     

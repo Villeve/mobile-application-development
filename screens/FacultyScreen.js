@@ -7,7 +7,8 @@ import {
   TouchableOpacity,
   FlatList,
   TextInput,
-  Button
+  Button,
+  ImageBackground
 } from "react-native";
 import axios from "axios";
 
@@ -104,8 +105,7 @@ class FacultyScreen extends React.Component {
         });
     }
     return (
-      <View style={styles.container}>
-        <Text style={styles.userText}>Faculties</Text>
+      <ImageBackground source={require('../assets/fac4.jpg')} style={styles.container}>
         {role === "1" && 
          <View style={styles.inputContainer}>
          <TextInput
@@ -114,9 +114,10 @@ class FacultyScreen extends React.Component {
            onChangeText={textAdded}
            value={this.state.newFaculty}
          />
+         <Button title="ADD" onPress={addFaculty}/>
        </View>
       }
-      <Button title="ADD" onPress={addFaculty}/>
+      
         <FlatList
             data={faculties}
             keyExtractor={item => item._id}
@@ -135,7 +136,7 @@ class FacultyScreen extends React.Component {
             </TouchableOpacity>
             )}
       />
-      </View>
+      </ImageBackground>
     );
   }
 }
@@ -144,10 +145,7 @@ export default FacultyScreen;
 
 const styles = StyleSheet.create({
   container: {
-    marginTop: 40,
-    height: "100%",
-    //alignItems: "center",
-    //justifyContent: "center"
+    height: "100%"
   },
   dashboardWrapper: {
     textAlign: "center"
@@ -165,19 +163,17 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     flexDirection: "row",
     justifyContent: "space-between",
-    textAlignVertical: "center"
-  },
-  inputContainer: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "center"
+    textAlignVertical: "center",
+    opacity: 0.8
   },
   input: {
     width: "100%",
     borderBottomColor: "black",
     borderWidth: 1,
     padding: 10,
-    marginVertical: 10
+    marginVertical: 10,
+    backgroundColor: "white",
+    opacity: 0.8
   },
   removeButton: {
     backgroundColor: "red",

@@ -3,6 +3,7 @@ import {
   View,
   Text,
   StyleSheet,
+  ImageBackground
 } from "react-native";
 import Comment from "../components/Comment"
 
@@ -14,41 +15,12 @@ class CourseInfoScreen extends React.Component {
             comments: []
           };
     }
-    async componentDidMount() {
-        await this.fetchComments()
-    }
-    /*
-    async fetchComments() {
-        const token = await AsyncStorage.getItem("token");
-        const headers = {
-          Authorization: "Bearer " + token
-        };
-        axios({
-          method: "GET",
-          url: "https://mobile-app-backend-uva.herokuapp.com/api/comments/" + this.state.courseInfo._id,
-          headers: headers
-        })
-          .then(res => {
-            console.warn(res.data);
-            this.setState({
-              comments: res.data
-            });
-          })
-          .catch(error => {
-            console.warn(error);
-            this.setState({
-              comments: []
-            });
-            alert("Error While fetching data");
-          });
-    }
-*/
+
   render() {
     
     return (
-      <View style={styles.container}>
+      <ImageBackground source={require('../assets/info2.png')} style={styles.container}>
           <View style={styles.infoContainer}>
-          <Text style={styles.userText}>Course Info Screen</Text>
         <Text style={styles.itemHeader}>Name:</Text>
         <View style={styles.listItem}>
             <Text>{this.state.courseInfo.name}</Text>
@@ -71,7 +43,7 @@ class CourseInfoScreen extends React.Component {
         </View>
           </View>
         <Comment courseId={this.state.courseInfo._id}/>
-      </View>
+      </ImageBackground>
     );
   }
 }
@@ -80,10 +52,7 @@ export default CourseInfoScreen;
 
 const styles = StyleSheet.create({
   container: {
-    marginTop: 20,
-    height: "100%",
-    //alignItems: "center",
-    //justifyContent: "center"
+    height: "100%"
   },
   infoContainer: {
     height: "45%"
@@ -107,7 +76,8 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     flexDirection: "row",
     justifyContent: "space-between",
-    textAlignVertical: "center"
+    textAlignVertical: "center",
+    opacity: 0.8
   },
   inputContainer: {
     flexDirection: "row",
