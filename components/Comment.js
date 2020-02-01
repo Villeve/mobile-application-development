@@ -125,16 +125,19 @@ const Comment = props => {
                 onChangeText={textAdded}
                 value={enteredComment}
             />
-        <Button title="ADD" onPress={addComment}/>
+            <Button title="ADD" onPress={addComment}/>
        </View>
         <FlatList
             data={comments}
             keyExtractor={item => item._id}
             renderItem={itemData => (
-            <View>
-            <Text>{itemData.item.postedBy} {itemData.item.date.substring(0, 10)}</Text>
-                <Text>{itemData.item.content}</Text>
-                {(itemData.item.postedBy === username || role === "1") && <Button title="Remove" onPress={() => removeCourse(itemData.item._id)} />}
+            <View style={styles.commentItems}>
+                <Text style={styles.commentHeader}>{itemData.item.postedBy}</Text>
+                <Text style={styles.commentHeader}> ({itemData.item.date.substring(0, 10)}):</Text>
+                <Text> {itemData.item.content}</Text>
+                {(itemData.item.postedBy === username || role === "1") && 
+                    <Button title="Remove" onPress={() => removeCourse(itemData.item._id)} />
+                }
             </View>
             )}
       />
@@ -145,8 +148,8 @@ const Comment = props => {
 const styles = StyleSheet.create({
     container: {
         height: "30%",
-        alignItems: "center",
-        justifyContent: "center"
+        //alignItems: "center",
+        //justifyContent: "center"
     },
     inputContainer: {
         flexDirection: "row",
@@ -158,6 +161,14 @@ const styles = StyleSheet.create({
         borderBottomColor: "black",
         borderWidth: 1,
         padding: 10
+    },
+    commentItems: {
+        flexDirection: "row",
+        marginVertical: 5,
+    },
+    commentHeader: {
+        fontSize: 12,
+        color: "grey"
     }
 });
 

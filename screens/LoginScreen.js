@@ -39,6 +39,7 @@ class LoginScreen extends React.Component {
                   username: "",
                   password: ""
               })
+              console.log("LOGGING IN", res.data.name)
               AsyncStorage.setItem("token", res.data.token)
               AsyncStorage.setItem("name", res.data.name)
               AsyncStorage.setItem("role", res.data.role)

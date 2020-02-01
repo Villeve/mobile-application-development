@@ -4,7 +4,6 @@ import {
   Text,
   StyleSheet,
 } from "react-native";
-import axios from "axios";
 import Comment from "../components/Comment"
 
 class CourseInfoScreen extends React.Component {
@@ -49,6 +48,7 @@ class CourseInfoScreen extends React.Component {
     return (
       <View style={styles.container}>
         <Text style={styles.userText}>Course Info Screen</Text>
+        
         <Text>Name:</Text>
         <View style={styles.listItem}>
             <Text>{this.state.courseInfo.name}</Text>
@@ -79,6 +79,7 @@ export default CourseInfoScreen;
 
 const styles = StyleSheet.create({
   container: {
+    marginTop: 10,
     height: "100%",
     alignItems: "center",
     justifyContent: "center"

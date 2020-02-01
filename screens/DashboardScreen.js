@@ -12,28 +12,29 @@ import {
 import axios from "axios";
 
 class DashboardScreen extends React.Component {
-    constructor(props) {
-        super(props)
-        this.state = {
-            universities: [],
-            newUniversity: "",
-            name: "",
-            role: "0"
-          };
-    }
-  
+  constructor(props) {
+    super(props);
+    this.state = {
+      universities: [],
+      newUniversity: "",
+      name: "",
+      role: "0"
+    };
+  }
 
   async componentDidMount() {
-    await this.getUniversities()
-    await this.setUserNameAndType()
+    await this.getUniversities();
+    await this.setUserNameAndType();
   }
+
   async setUserNameAndType() {
     const role = await AsyncStorage.getItem("role");
     const name = await AsyncStorage.getItem("name");
+    console.log("NAME FROM STORAGE:", name);
     this.setState({
-        role: role,
-        name: name
-    })
+      role: role,
+      name: name
+    });
   }
   async getUniversities() {
     const token = await AsyncStorage.getItem("token");
@@ -65,11 +66,13 @@ class DashboardScreen extends React.Component {
     };
     axios({
       method: "DELETE",
-      url: "https://mobile-app-backend-uva.herokuapp.com/api/universities/" + universityId,
+      url:
+        "https://mobile-app-backend-uva.herokuapp.com/api/universities/" +
+        universityId,
       headers: headers
     })
-    .then(res => {
-        this.getUniversities()
+      .then(res => {
+        this.getUniversities();
       })
       .catch(error => {
         console.warn(error);
@@ -77,13 +80,20 @@ class DashboardScreen extends React.Component {
       });
   }
   toggleFacultiesScreen(universityId) {
-    this.props.navigation.navigate("Faculties", {universityId: universityId});
+    this.props.navigation.navigate("Faculties", { universityId: universityId });
   }
-  logout() {
-    AsyncStorage.multiRemove(["token", "name", "role"]).then(res => {
+  async logout() {
+    try {
+      await AsyncStorage.multiRemove(["token", "name", "role"]);
+      this.props.navigation.navigate("Auth");
+    } catch (error) {
+      console.log(error);
+    }
+    /*
+    await AsyncStorage.multiRemove(["token", "name", "role"]).then(res => {
         this.props.navigation.navigate("Auth");
     });
-    
+    */
 
     /*
     AsyncStorage.removeItem("token").then(res => {
@@ -99,36 +109,36 @@ class DashboardScreen extends React.Component {
   render() {
     const { universities, newUniversity, name, role } = this.state;
     const textAdded = text =>
-        this.setState({
-            newUniversity: text
-    });
+      this.setState({
+        newUniversity: text
+      });
     const addUniversity = async () => {
-        const token = await AsyncStorage.getItem("token");
-        const headers = {
+      const token = await AsyncStorage.getItem("token");
+      const headers = {
         Authorization: "Bearer " + token
-        };
-        const req = {
-            name: newUniversity
-          };
-        axios({
+      };
+      const req = {
+        name: newUniversity
+      };
+      axios({
         method: "POST",
-        url: "https://mobile-app-backend-uva.herokuapp.com/api/universities", 
+        url: "https://mobile-app-backend-uva.herokuapp.com/api/universities",
         data: req,
         headers: headers
-        })
+      })
         .then(res => {
-            console.warn(res.data);
-            this.getUniversities()
+          console.warn(res.data);
+          this.getUniversities();
         })
         .catch(error => {
-            console.warn(error);
-            alert("Error while adding new university");
+          console.warn(error);
+          alert("Error while adding new university");
         });
-    }
+    };
     return (
       <View style={styles.container}>
         <View style={styles.dashboardWrapper}>
-          <Text style={styles.userText}>Hey { name }</Text>
+          <Text style={styles.userText}>Hey {name}</Text>
           <TouchableOpacity style={styles.logoutButton}>
             <Text style={styles.logoutButtonText} onPress={() => this.logout()}>
               Logout
@@ -136,30 +146,36 @@ class DashboardScreen extends React.Component {
           </TouchableOpacity>
         </View>
         <Text style={styles.userText}>Universities</Text>
+        {role === "1" && (
+          <View style={styles.inputContainer}>
+            <TextInput
+              placeholder="Add new university"
+              style={styles.input}
+              onChangeText={textAdded}
+              value={this.state.newUniversity}
+            />
+          </View>
+        )}
+        <Button style={styles.newUniButton} title="ADD" onPress={addUniversity} />
         <FlatList
-            data={universities}
-            keyExtractor={item => item._id}
-            renderItem={itemData => (
-            <TouchableOpacity onPress={() => this.toggleFacultiesScreen(itemData.item._id)}>
-            <View style={styles.listItem}>
+          data={universities}
+          keyExtractor={item => item._id}
+          renderItem={itemData => (
+            <TouchableOpacity
+              onPress={() => this.toggleFacultiesScreen(itemData.item._id)}
+            >
+              <View style={styles.listItem}>
                 <Text>{itemData.item.name}</Text>
-                {role === "1" && <Button title="Remove" onPress={() => this.removeUniversity(itemData.item._id)}/>}
-            </View>
+                {role === "1" && (
+                  <Button
+                    title="Remove"
+                    onPress={() => this.removeUniversity(itemData.item._id)}
+                  />
+                )}
+              </View>
             </TouchableOpacity>
-            )}
-      />
-      {role === "1" && 
-        <View style={styles.inputContainer}>
-        <TextInput
-          placeholder="Add new university"
-          style={styles.input}
-          onChangeText={textAdded}
-          value={this.state.newUniversity}
+          )}
         />
-        <Button title="ADD" onPress={addUniversity}/>
-      </View>
-      }
-      
       </View>
     );
   }
@@ -169,6 +185,7 @@ export default DashboardScreen;
 
 const styles = StyleSheet.create({
   container: {
+    marginTop: 40,
     height: "100%",
     alignItems: "center",
     justifyContent: "center"
@@ -204,13 +221,18 @@ const styles = StyleSheet.create({
   },
   inputContainer: {
     flexDirection: "row",
+    alignItems: "center",
     justifyContent: "space-between",
-    alignItems: "center"
+    marginVertical: 10,
   },
   input: {
-    width: "80%",
+    width: "60%",
     borderBottomColor: "black",
     borderWidth: 1,
-    padding: 10
+    padding: 10,
+    justifyContent: "space-between"
   },
+  newUniButton: {
+
+  }
 });

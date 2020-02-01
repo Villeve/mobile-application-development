@@ -106,6 +106,17 @@ class FacultyScreen extends React.Component {
     return (
       <View style={styles.container}>
         <Text style={styles.userText}>Faculties</Text>
+        {role === "1" && 
+         <View style={styles.inputContainer}>
+         <TextInput
+           placeholder="Add new faculty"
+           style={styles.input}
+           onChangeText={textAdded}
+           value={this.state.newFaculty}
+         />
+       </View>
+      }
+      <Button title="ADD" onPress={addFaculty}/>
         <FlatList
             data={faculties}
             keyExtractor={item => item._id}
@@ -118,17 +129,6 @@ class FacultyScreen extends React.Component {
             </TouchableOpacity>
             )}
       />
-      {role === "1" && 
-         <View style={styles.inputContainer}>
-         <TextInput
-           placeholder="Add new faculty"
-           style={styles.input}
-           onChangeText={textAdded}
-           value={this.state.newFaculty}
-         />
-         <Button title="ADD" onPress={addFaculty}/>
-       </View>
-      }
       </View>
     );
   }
@@ -138,6 +138,7 @@ export default FacultyScreen;
 
 const styles = StyleSheet.create({
   container: {
+    marginTop: 40,
     height: "100%",
     alignItems: "center",
     justifyContent: "center"
@@ -166,9 +167,10 @@ const styles = StyleSheet.create({
     alignItems: "center"
   },
   input: {
-    width: "80%",
+    width: "50%",
     borderBottomColor: "black",
     borderWidth: 1,
-    padding: 10
+    padding: 10,
+    marginVertical: 10
   }
 });

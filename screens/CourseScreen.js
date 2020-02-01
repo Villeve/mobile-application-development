@@ -111,6 +111,7 @@ export default CourseScreen;
 
 const styles = StyleSheet.create({
   container: {
+    marginTop: 40,
     height: "100%",
     alignItems: "center",
     justifyContent: "center"
