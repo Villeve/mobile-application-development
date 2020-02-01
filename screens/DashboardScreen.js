@@ -89,21 +89,6 @@ class DashboardScreen extends React.Component {
     } catch (error) {
       console.log(error);
     }
-    /*
-    await AsyncStorage.multiRemove(["token", "name", "role"]).then(res => {
-        this.props.navigation.navigate("Auth");
-    });
-    */
-
-    /*
-    AsyncStorage.removeItem("token").then(res => {
-        AsyncStorage.removeItem("name").then(res => {
-            AsyncStorage.removeItem("role").then(res => {
-                this.props.navigation.navigate("Auth");
-            });
-        });
-    });
-    */
   }
 
   render() {
@@ -154,9 +139,9 @@ class DashboardScreen extends React.Component {
               onChangeText={textAdded}
               value={this.state.newUniversity}
             />
+                <Button style={styles.newUniButton} title="ADD" onPress={addUniversity} />
           </View>
         )}
-        <Button style={styles.newUniButton} title="ADD" onPress={addUniversity} />
         <FlatList
           data={universities}
           keyExtractor={item => item._id}
@@ -167,10 +152,12 @@ class DashboardScreen extends React.Component {
               <View style={styles.listItem}>
                 <Text>{itemData.item.name}</Text>
                 {role === "1" && (
-                  <Button
-                    title="Remove"
-                    onPress={() => this.removeUniversity(itemData.item._id)}
-                  />
+                    <TouchableOpacity style={styles.logoutButton}>
+                    <Text style={styles.logoutButtonText} onPress={() => this.removeUniversity(itemData.item._id)}>
+                      Remove
+                    </Text>
+                    </TouchableOpacity>
+                  
                 )}
               </View>
             </TouchableOpacity>
@@ -187,22 +174,24 @@ const styles = StyleSheet.create({
   container: {
     marginTop: 40,
     height: "100%",
-    alignItems: "center",
-    justifyContent: "center"
+    //alignItems: "center",
+    //justifyContent: "center"
   },
   dashboardWrapper: {
-    textAlign: "center"
+    //textAlign: "center",
+    padding: 10,
+    justifyContent: "space-between",
   },
   userText: {
     fontSize: 30,
     fontWeight: "bold",
-    marginBottom: 10
+    marginBottom: 10,
   },
   logoutButton: {
     backgroundColor: "red",
     paddingVertical: 10,
     width: 100,
-    alignSelf: "center"
+    //alignSelf: "center"
   },
   logoutButtonText: {
     color: "#fff",
@@ -221,18 +210,20 @@ const styles = StyleSheet.create({
   },
   inputContainer: {
     flexDirection: "row",
-    alignItems: "center",
     justifyContent: "space-between",
-    marginVertical: 10,
-  },
-  input: {
-    width: "60%",
-    borderBottomColor: "black",
-    borderWidth: 1,
-    padding: 10,
-    justifyContent: "space-between"
-  },
+    alignItems: "center",
+    padding: 10
+    },
+    input: {
+        width: "80%",
+        borderBottomColor: "black",
+        borderWidth: 1,
+        padding: 10
+    },
   newUniButton: {
-
+    
+  },
+  removeButton: {
+      color: "red"
   }
 });

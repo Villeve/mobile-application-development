@@ -89,6 +89,7 @@ class CourseScreen extends React.Component {
     return (
       <View style={styles.container}>
         <Text style={styles.userText}>Courses</Text>
+        {role === "1" && <Button title="New Course" onPress={() => this.toggleNewCourseScreen(this.props.navigation.state.params.facultyId)}/>}
         <FlatList
             data={courses}
             keyExtractor={item => item._id}
@@ -96,12 +97,17 @@ class CourseScreen extends React.Component {
             <TouchableOpacity onPress={() => this.toggleCourseInfoScreen(itemData.item)}>
             <View style={styles.listItem}>
                 <Text>{itemData.item.name}</Text>
-                {role === "1" && <Button title="Remove" onPress={() => this.removeCourse(itemData.item._id)}/>}
+                {role === "1" &&
+                <TouchableOpacity style={styles.removeButton}>
+                <Text style={styles.removeButtonText} onPress={() => this.removeCourse(itemData.item._id)}>
+                  Remove
+                </Text>
+                </TouchableOpacity>
+            }
             </View>
             </TouchableOpacity>
             )}
       />
-      {role === "1" && <Button title="New Course" onPress={() => this.toggleNewCourseScreen(this.props.navigation.state.params.facultyId)}/>}
       </View>
     );
   }
@@ -113,8 +119,8 @@ const styles = StyleSheet.create({
   container: {
     marginTop: 40,
     height: "100%",
-    alignItems: "center",
-    justifyContent: "center"
+    //alignItems: "center",
+    //justifyContent: "center"
   },
   dashboardWrapper: {
     textAlign: "center"
@@ -144,5 +150,15 @@ const styles = StyleSheet.create({
     borderBottomColor: "black",
     borderWidth: 1,
     padding: 10
+  },
+  removeButton: {
+    backgroundColor: "red",
+    paddingVertical: 10,
+    width: 100
+  },
+  removeButtonText: {
+    color: "#fff",
+    textAlign: "center",
+    fontWeight: "bold"
   }
 });

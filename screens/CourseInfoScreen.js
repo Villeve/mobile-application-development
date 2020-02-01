@@ -47,28 +47,29 @@ class CourseInfoScreen extends React.Component {
     
     return (
       <View style={styles.container}>
-        <Text style={styles.userText}>Course Info Screen</Text>
-        
-        <Text>Name:</Text>
+          <View style={styles.infoContainer}>
+          <Text style={styles.userText}>Course Info Screen</Text>
+        <Text style={styles.itemHeader}>Name:</Text>
         <View style={styles.listItem}>
             <Text>{this.state.courseInfo.name}</Text>
         </View>
-        <Text>Code:</Text>
+        <Text style={styles.itemHeader}>Code:</Text>
         <View style={styles.listItem}>
             <Text>{this.state.courseInfo.code}</Text>
         </View>
-        <Text>Teacher:</Text>
+        <Text style={styles.itemHeader}>Teacher:</Text>
         <View style={styles.listItem}>
             <Text>{this.state.courseInfo.teacher}</Text>
         </View>
-        <Text>Scope:</Text>
+        <Text style={styles.itemHeader}>Scope:</Text>
         <View style={styles.listItem}>
             <Text>{this.state.courseInfo.scope}</Text>
         </View>
-        <Text>Objectives:</Text>
+        <Text style={styles.itemHeader}>Objectives:</Text>
         <View style={styles.listItem}>
             <Text>{this.state.courseInfo.objectives}</Text>
         </View>
+          </View>
         <Comment courseId={this.state.courseInfo._id}/>
       </View>
     );
@@ -79,10 +80,13 @@ export default CourseInfoScreen;
 
 const styles = StyleSheet.create({
   container: {
-    marginTop: 10,
+    marginTop: 20,
     height: "100%",
-    alignItems: "center",
-    justifyContent: "center"
+    //alignItems: "center",
+    //justifyContent: "center"
+  },
+  infoContainer: {
+    height: "45%"
   },
   dashboardWrapper: {
     textAlign: "center"
@@ -90,11 +94,14 @@ const styles = StyleSheet.create({
   userText: {
     fontSize: 30,
     fontWeight: "bold",
-    marginBottom: 10
+    marginBottom: 0
+  },
+  itemHeader: {
+    paddingLeft: 5
   },
   listItem: {
-    padding: 10,
-    marginVertical: 10,
+    padding: 5,
+    marginBottom: 5,
     backgroundColor: "#ccc",
     borderColor: "black",
     borderWidth: 1,
@@ -108,7 +115,7 @@ const styles = StyleSheet.create({
     alignItems: "center"
   },
   input: {
-    width: "80%",
+    width: "100%",
     borderBottomColor: "black",
     borderWidth: 1,
     padding: 10

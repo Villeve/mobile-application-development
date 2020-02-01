@@ -125,18 +125,22 @@ const Comment = props => {
                 onChangeText={textAdded}
                 value={enteredComment}
             />
-            <Button title="ADD" onPress={addComment}/>
        </View>
+       <Button  title="ADD" onPress={addComment}/>
         <FlatList
+            style={styles.newCommentButton}
             data={comments}
             keyExtractor={item => item._id}
             renderItem={itemData => (
             <View style={styles.commentItems}>
-                <Text style={styles.commentHeader}>{itemData.item.postedBy}</Text>
-                <Text style={styles.commentHeader}> ({itemData.item.date.substring(0, 10)}):</Text>
+                <Text style={styles.commentHeader}>{itemData.item.postedBy} ({itemData.item.date.substring(0, 10)}):</Text>
                 <Text> {itemData.item.content}</Text>
-                {(itemData.item.postedBy === username || role === "1") && 
-                    <Button title="Remove" onPress={() => removeCourse(itemData.item._id)} />
+                {(itemData.item.postedBy === username || role === "1") &&
+                    <TouchableOpacity style={styles.removeButton}>
+                    <Text style={styles.removeButtonText} onPress={() => removeCourse(itemData.item._id)}>
+                      Remove
+                    </Text>
+                    </TouchableOpacity>
                 }
             </View>
             )}
@@ -147,29 +151,43 @@ const Comment = props => {
 
 const styles = StyleSheet.create({
     container: {
-        height: "30%",
+        height: "52%",
         //alignItems: "center",
         //justifyContent: "center"
     },
     inputContainer: {
         flexDirection: "row",
-        justifyContent: "space-between",
-        alignItems: "center"
+        //justifyContent: "space-between",
+        //alignItems: "center"
     },
     input: {
-        width: "80%",
+        width: "100%",
         borderBottomColor: "black",
         borderWidth: 1,
-        padding: 10
+        padding: 10,
+        marginBottom: 5
+    },
+    newCommentButton: {
+      marginTop: 5
     },
     commentItems: {
-        flexDirection: "row",
         marginVertical: 5,
     },
     commentHeader: {
+        paddingLeft: 5,
         fontSize: 12,
         color: "grey"
-    }
+    },
+    removeButton: {
+        backgroundColor: "red",
+        paddingVertical: 5,
+        width: 70
+      },
+      removeButtonText: {
+        color: "#fff",
+        textAlign: "center",
+        fontWeight: "bold"
+      }
 });
 
 export default Comment;

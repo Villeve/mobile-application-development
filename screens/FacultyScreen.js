@@ -124,7 +124,13 @@ class FacultyScreen extends React.Component {
             <TouchableOpacity onPress={() => this.toggleCourseScreen(itemData.item._id)}>
             <View style={styles.listItem}>
                 <Text>{itemData.item.name}</Text>
-                {role === "1" && <Button title="Remove" onPress={() => this.removeFaculty(itemData.item._id)}/>}
+                {role === "1" && 
+                <TouchableOpacity style={styles.removeButton}>
+                    <Text style={styles.removeButtonText} onPress={() => this.removeFaculty(itemData.item._id)}>
+                      Remove
+                    </Text>
+                    </TouchableOpacity>
+                }
             </View>
             </TouchableOpacity>
             )}
@@ -140,8 +146,8 @@ const styles = StyleSheet.create({
   container: {
     marginTop: 40,
     height: "100%",
-    alignItems: "center",
-    justifyContent: "center"
+    //alignItems: "center",
+    //justifyContent: "center"
   },
   dashboardWrapper: {
     textAlign: "center"
@@ -167,10 +173,20 @@ const styles = StyleSheet.create({
     alignItems: "center"
   },
   input: {
-    width: "50%",
+    width: "100%",
     borderBottomColor: "black",
     borderWidth: 1,
     padding: 10,
     marginVertical: 10
+  },
+  removeButton: {
+    backgroundColor: "red",
+    paddingVertical: 10,
+    width: 100
+  },
+  removeButtonText: {
+    color: "#fff",
+    textAlign: "center",
+    fontWeight: "bold"
   }
 });
