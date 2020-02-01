@@ -22,17 +22,30 @@ const Comment = props => {
     }
 
     const fetchComments = async () => {
-        const token = await AsyncStorage.getItem("token");
+        try {
+            const token = await AsyncStorage.getItem("token");
         const headers = {
           Authorization: "Bearer " + token
         };
+            const res = await axios({
+                method: "GET",
+                url: "https://mobile-app-backend-uva.herokuapp.com/api/comments/" + props.courseId,
+                headers: headers
+            })
+            setComments(res.data)
+        } catch(error) {
+            console.warn(error);
+            setComments([])
+            alert("Error While fetching data");
+        }
+
+        /*
         axios({
           method: "GET",
           url: "https://mobile-app-backend-uva.herokuapp.com/api/comments/" + props.courseId,
           headers: headers
         })
           .then(res => {
-            console.warn(res.data);
             setComments(res.data)
           })
           .catch(error => {
@@ -40,6 +53,7 @@ const Comment = props => {
             setComments([])
             alert("Error While fetching data");
           });
+          */
     }
         const addComment = async () => {
             const username = await AsyncStorage.getItem("name");
@@ -60,10 +74,7 @@ const Comment = props => {
             headers: headers
             })
             .then(res => {
-                console.warn(res.data);
-                //setComments(res.data)
                 fetchComments()
-                //this.getFaculties()
             })
             .catch(error => {
                 console.warn(error);
@@ -81,7 +92,6 @@ const Comment = props => {
           headers: headers
         })
         .then(res => {
-            console.warn(res.data);
             fetchComments()
           })
           .catch(error => {
@@ -89,11 +99,12 @@ const Comment = props => {
             alert("Error While Removing Comment");
           });
       }
+      /*
       const displayButton = async (postedBy) => {
         const username = await AsyncStorage.getItem("name");
         const role = await AsyncStorage.getItem("role");
         return username
-        /*
+        
         console.log(postedBy, username, typeof(username), typeof(postedBy), role, typeof(role))
         if("Ville V" === postedBy) {
             console.log("XXX")
@@ -102,8 +113,9 @@ const Comment = props => {
         else {
             return false
         }
-        */
+        
       }
+      */
   return (
     <View style={styles.container}>
         <View style={styles.inputContainer}>
@@ -117,6 +129,7 @@ const Comment = props => {
        </View>
         <FlatList
             data={comments}
+            keyExtractor={item => item._id}
             renderItem={itemData => (
             <View>
             <Text>{itemData.item.postedBy} {itemData.item.date.substring(0, 10)}</Text>

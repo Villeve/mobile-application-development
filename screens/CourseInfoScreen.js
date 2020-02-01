@@ -3,11 +3,6 @@ import {
   View,
   Text,
   StyleSheet,
-  AsyncStorage,
-  TouchableOpacity,
-  FlatList,
-  TextInput,
-  Button
 } from "react-native";
 import axios from "axios";
 import Comment from "../components/Comment"

@@ -16,14 +16,21 @@ class FacultyScreen extends React.Component {
         super(props)
         this.state = {
             faculties: [],
-            newFaculty: ""
+            newFaculty: "",
+            role: "0"
           };
     }
     async componentDidMount() {
         await this.getFaculties()
+        await this.setUserRole()
+    }
+    async setUserRole() {
+        const role = await AsyncStorage.getItem("role");
+        this.setState({
+            role: role
+        })
     }
     async getFaculties() {
-        console.log("getting faculties...")
         const token = await AsyncStorage.getItem("token");
         const headers = {
           Authorization: "Bearer " + token
@@ -34,7 +41,6 @@ class FacultyScreen extends React.Component {
           headers: headers
         })
           .then(res => {
-            console.warn(res.data);
             this.setState({
               faculties: res.data
             });
@@ -58,21 +64,18 @@ class FacultyScreen extends React.Component {
           headers: headers
         })
         .then(res => {
-            console.warn(res.data);
             this.getFaculties()
           })
           .catch(error => {
-            console.warn(error);
             alert("Error While Removing Faculty");
           });
       }
       toggleCourseScreen(facultyId) {
-        console.log(facultyId)
         this.props.navigation.navigate("Courses", {facultyId: facultyId});
     }
 
   render() {
-    const { faculties, newFaculty } = this.state;
+    const { faculties, newFaculty, role } = this.state;
     const textAdded = text =>
         this.setState({
             newFaculty: text
@@ -93,7 +96,6 @@ class FacultyScreen extends React.Component {
         headers: headers
         })
         .then(res => {
-            console.warn(res.data);
             this.getFaculties()
         })
         .catch(error => {
@@ -106,24 +108,27 @@ class FacultyScreen extends React.Component {
         <Text style={styles.userText}>Faculties</Text>
         <FlatList
             data={faculties}
+            keyExtractor={item => item._id}
             renderItem={itemData => (
             <TouchableOpacity onPress={() => this.toggleCourseScreen(itemData.item._id)}>
             <View style={styles.listItem}>
                 <Text>{itemData.item.name}</Text>
-                <Button title="Remove" onPress={() => this.removeFaculty(itemData.item._id)}/>
+                {role === "1" && <Button title="Remove" onPress={() => this.removeFaculty(itemData.item._id)}/>}
             </View>
             </TouchableOpacity>
             )}
       />
-      <View style={styles.inputContainer}>
-        <TextInput
-          placeholder="Add new faculty"
-          style={styles.input}
-          onChangeText={textAdded}
-          value={this.state.newFaculty}
-        />
-        <Button title="ADD" onPress={addFaculty}/>
-      </View>
+      {role === "1" && 
+         <View style={styles.inputContainer}>
+         <TextInput
+           placeholder="Add new faculty"
+           style={styles.input}
+           onChangeText={textAdded}
+           value={this.state.newFaculty}
+         />
+         <Button title="ADD" onPress={addFaculty}/>
+       </View>
+      }
       </View>
     );
   }

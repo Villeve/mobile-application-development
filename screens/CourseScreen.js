@@ -16,38 +16,47 @@ class CourseScreen extends React.Component {
         super(props)
         this.state = {
             courses: [],
-            newCourse: {}
+            newCourse: {},
+            role: "0"
           };
     }
     async componentDidMount() {
       await this.getCourses()
+      await this.setUserRole()
     }
+    async setUserRole() {
+      const role = await AsyncStorage.getItem("role");
+      this.setState({
+          role: role
+      })
+  }
     async componentWillReceiveProps() {
       await this.getCourses()
     }
     async getCourses() {
+      try {
         const token = await AsyncStorage.getItem("token");
         const headers = {
           Authorization: "Bearer " + token
         };
-        axios({
+        const res = await axios({
           method: "GET",
           url: "https://mobile-app-backend-uva.herokuapp.com/api/courses/" + this.props.navigation.state.params.facultyId,
           headers: headers
         })
-          .then(res => {
-            console.warn(res.data);
+
             this.setState({
               courses: res.data
             });
-          })
-          .catch(error => {
-            console.warn(error);
+
+      } catch (error) {
+        console.warn(error);
             this.setState({
               courses: []
             });
             alert("Error While fetching data");
-          });
+      }
+
       }
       async removeCourse(courseId) {
         const token = await AsyncStorage.getItem("token");
@@ -60,7 +69,6 @@ class CourseScreen extends React.Component {
           headers: headers
         })
         .then(res => {
-            console.warn(res.data);
             this.getCourses()
           })
           .catch(error => {
@@ -76,23 +84,24 @@ class CourseScreen extends React.Component {
      }
 
   render() {
-    const { courses, newCourse } = this.state;
+    const { courses, newCourse, role } = this.state;
     
     return (
       <View style={styles.container}>
         <Text style={styles.userText}>Courses</Text>
         <FlatList
             data={courses}
+            keyExtractor={item => item._id}
             renderItem={itemData => (
             <TouchableOpacity onPress={() => this.toggleCourseInfoScreen(itemData.item)}>
             <View style={styles.listItem}>
                 <Text>{itemData.item.name}</Text>
-                <Button title="Remove" onPress={() => this.removeCourse(itemData.item._id)}/>
+                {role === "1" && <Button title="Remove" onPress={() => this.removeCourse(itemData.item._id)}/>}
             </View>
             </TouchableOpacity>
             )}
       />
-      <Button title="New Course" onPress={() => this.toggleNewCourseScreen(this.props.navigation.state.params.facultyId)}/>
+      {role === "1" && <Button title="New Course" onPress={() => this.toggleNewCourseScreen(this.props.navigation.state.params.facultyId)}/>}
       </View>
     );
   }

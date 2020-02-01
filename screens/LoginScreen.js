@@ -34,26 +34,25 @@ class LoginScreen extends React.Component {
           })
           axios.post("https://mobile-app-backend-uva.herokuapp.com/api/users/login", req).then(
             res => {
-              console.warn(res)
               this.setState({
-                  loading: false
+                  loading: false,
+                  username: "",
+                  password: ""
               })
               AsyncStorage.setItem("token", res.data.token)
               AsyncStorage.setItem("name", res.data.name)
               AsyncStorage.setItem("role", res.data.role)
-              //AsyncStorage.setItem("username")
             .then(
                 res => {
                     this.props.navigation.navigate("App");
                 }
-            )
-              //console.warn(res);
-              
+            ) 
             },
             err => {
               console.warn(err)
               this.setState({
-                  loading: false
+                  loading: false,
+                  password: ""
               })
               alert("Wrong username or password");
             }

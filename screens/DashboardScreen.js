@@ -16,15 +16,24 @@ class DashboardScreen extends React.Component {
         super(props)
         this.state = {
             universities: [],
-            newUniversity: ""
+            newUniversity: "",
+            name: "",
+            role: "0"
           };
     }
   
 
   async componentDidMount() {
     await this.getUniversities()
+    await this.setUserNameAndType()
+  }
+  async setUserNameAndType() {
     const role = await AsyncStorage.getItem("role");
-    console.log("WWWWWWWWWWWWWWWWWWWWWWWWWWWWW", role)
+    const name = await AsyncStorage.getItem("name");
+    this.setState({
+        role: role,
+        name: name
+    })
   }
   async getUniversities() {
     const token = await AsyncStorage.getItem("token");
@@ -60,7 +69,6 @@ class DashboardScreen extends React.Component {
       headers: headers
     })
     .then(res => {
-        console.warn(res.data);
         this.getUniversities()
       })
       .catch(error => {
@@ -72,13 +80,24 @@ class DashboardScreen extends React.Component {
     this.props.navigation.navigate("Faculties", {universityId: universityId});
   }
   logout() {
-    AsyncStorage.removeItem("token").then(res => {
-      this.props.navigation.navigate("Auth");
+    AsyncStorage.multiRemove(["token", "name", "role"]).then(res => {
+        this.props.navigation.navigate("Auth");
     });
+    
+
+    /*
+    AsyncStorage.removeItem("token").then(res => {
+        AsyncStorage.removeItem("name").then(res => {
+            AsyncStorage.removeItem("role").then(res => {
+                this.props.navigation.navigate("Auth");
+            });
+        });
+    });
+    */
   }
 
   render() {
-    const { universities, newUniversity } = this.state;
+    const { universities, newUniversity, name, role } = this.state;
     const textAdded = text =>
         this.setState({
             newUniversity: text
@@ -109,7 +128,7 @@ class DashboardScreen extends React.Component {
     return (
       <View style={styles.container}>
         <View style={styles.dashboardWrapper}>
-          <Text style={styles.userText}>Hey user</Text>
+          <Text style={styles.userText}>Hey { name }</Text>
           <TouchableOpacity style={styles.logoutButton}>
             <Text style={styles.logoutButtonText} onPress={() => this.logout()}>
               Logout
@@ -119,16 +138,18 @@ class DashboardScreen extends React.Component {
         <Text style={styles.userText}>Universities</Text>
         <FlatList
             data={universities}
+            keyExtractor={item => item._id}
             renderItem={itemData => (
             <TouchableOpacity onPress={() => this.toggleFacultiesScreen(itemData.item._id)}>
             <View style={styles.listItem}>
                 <Text>{itemData.item.name}</Text>
-                <Button title="Remove" onPress={() => this.removeUniversity(itemData.item._id)}/>
+                {role === "1" && <Button title="Remove" onPress={() => this.removeUniversity(itemData.item._id)}/>}
             </View>
             </TouchableOpacity>
             )}
       />
-      <View style={styles.inputContainer}>
+      {role === "1" && 
+        <View style={styles.inputContainer}>
         <TextInput
           placeholder="Add new university"
           style={styles.input}
@@ -137,6 +158,8 @@ class DashboardScreen extends React.Component {
         />
         <Button title="ADD" onPress={addUniversity}/>
       </View>
+      }
+      
       </View>
     );
   }
