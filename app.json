@@ -26,6 +26,7 @@
     "ios": {
       "supportsTablet": true
     },
-    "description": ""
+    "description": "Application made for course Mobile Application Development (2020) at University of Vaasa",
+    "githubUrl": "https://github.com/Villeve/mobile-application-development"
   }
 }

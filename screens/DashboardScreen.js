@@ -19,25 +19,14 @@ class DashboardScreen extends React.Component {
     this.state = {
       universities: [],
       newUniversity: "",
-      name: "",
-      role: "0"
+      role: this.props.navigation.state.params.role
     };
   }
 
   async componentDidMount() {
     await this.getUniversities();
-    await this.setUserNameAndType();
   }
 
-  async setUserNameAndType() {
-    const role = await AsyncStorage.getItem("role");
-    const name = await AsyncStorage.getItem("name");
-    console.log("NAME FROM STORAGE:", name);
-    this.setState({
-      role: role,
-      name: name
-    });
-  }
   async getUniversities() {
     const token = await AsyncStorage.getItem("token");
     const headers = {
@@ -88,7 +77,6 @@ class DashboardScreen extends React.Component {
     try {
       await AsyncStorage.multiRemove(["token", "name", "role"]);
       this.props.navigation.navigate("Auth");
-      //navigator.pop()
     } catch (error) {
       console.log(error);
     }

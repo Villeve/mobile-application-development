@@ -40,22 +40,11 @@ class RegisterScreen extends React.Component {
           //https://reqres.in/api/login
           axios.post("https://mobile-app-backend-uva.herokuapp.com/api/users/register", req).then(
             res => {
-              console.warn(res)
               this.setState({
                   loading: false
               })
               AsyncStorage.setItem("token", res.data.token)
               this.props.navigation.navigate("Auth");
-              /*
-            .then(
-                res => {
-                    alert("Account created successfully")
-                    this.props.navigation.navigate("Auth");
-                }
-            )
-            */
-              //console.warn(res);
-              
             },
             err => {
               console.warn(err)
@@ -75,7 +64,7 @@ class RegisterScreen extends React.Component {
   render() {
     const { username, email, password, password2, loading } = this.state;
     return (
-      <ImageBackground source={require('../assets/background4.jpg')} style={styles.container}>
+      <ImageBackground source={require('../assets/brickwall.jpg')} style={styles.container}>
         <View style={styles.formWrapper}>
           <View style={styles.formRow}>
             <TextInput

@@ -12,7 +12,7 @@ import axios from "axios";
 
 class LoginScreen extends React.Component {
   state = {
-    username: "",
+    email: "",
     password: "",
     loading: false
   };
@@ -24,10 +24,10 @@ class LoginScreen extends React.Component {
   }
 
   login() {
-    const { username, password } = this.state;
-    if(username && password) {
+    const { email, password } = this.state;
+    if(email && password) {
         const req = {
-            email: username,
+            email: email,
             password: password
           };
           this.setState({
@@ -37,16 +37,17 @@ class LoginScreen extends React.Component {
             res => {
               this.setState({
                   loading: false,
-                  username: "",
+                  email: "",
                   password: ""
               })
               console.log("LOGGING IN", res.data.name)
+              var role = res.data.role
               AsyncStorage.setItem("token", res.data.token)
               AsyncStorage.setItem("name", res.data.name)
-              AsyncStorage.setItem("role", res.data.role)
+              AsyncStorage.setItem("role", role)
             .then(
                 res => {
-                    this.props.navigation.navigate("App");
+                    this.props.navigation.navigate("App", {role: role});
                 }
             ) 
             },
@@ -56,29 +57,29 @@ class LoginScreen extends React.Component {
                   loading: false,
                   password: ""
               })
-              alert("Wrong username or password");
+              alert("Wrong email or password");
             }
           );
     }
     else {
-        alert("Enter username and password")
+        alert("Enter email and password")
     }
     
   }
 
   render() {
-    const { username, password, loading } = this.state;
+    const { email, password, loading } = this.state;
     return (
-      <ImageBackground source={require('../assets/background4.jpg')} style={styles.container}>
+      <ImageBackground source={require('../assets/brickwall.jpg')} style={styles.container}>
         <View style={styles.formWrapper}>
           <Text style={styles.title}>Welcome to the great University App</Text>
           <View style={styles.formRow}>
             <TextInput
               style={styles.textInput}
-              placeholder="Enter Username"
+              placeholder="Enter Email"
               placeholderTextColor="#333"
-              value={username}
-              onChangeText={value => this.onStateChange("username", value)}
+              value={email}
+              onChangeText={value => this.onStateChange("email", value)}
             />
           </View>
           <View style={styles.formRow}>
@@ -137,8 +138,9 @@ const styles = StyleSheet.create({
   title: {
     textAlign: "center",
     marginBottom: 20,
-    fontSize: 28,
-    fontWeight: "bold"
+    fontSize: 38,
+    fontWeight: "bold",
+    color: "yellow"
   },
   button: {
     paddingVertical: 10
@@ -151,7 +153,7 @@ const styles = StyleSheet.create({
   },
   registerText: {
     textAlign: "center",
-    color: "blue",
+    color: "yellow",
     fontSize: 18,
     fontWeight: "bold",
     paddingVertical: 10
