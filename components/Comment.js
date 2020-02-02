@@ -28,7 +28,7 @@ const Comment = props => {
     const role = await AsyncStorage.getItem("role");
     const username = await AsyncStorage.getItem("name");
     setUsername(username);
-    setRole(userTroleype);
+    setRole(role);
   };
 
   const fetchComments = async () => {
@@ -70,6 +70,7 @@ const Comment = props => {
       headers: headers
     })
       .then(res => {
+        setEnteredComment("")
         fetchComments();
       })
       .catch(error => {
@@ -108,7 +109,7 @@ const Comment = props => {
           value={enteredComment}
         />
       </View>
-      <Button title="ADD" onPress={addComment} />
+      <Button title="Send" onPress={addComment} />
       <FlatList
         style={styles.newCommentButton}
         data={comments}
@@ -150,12 +151,12 @@ const styles = StyleSheet.create({
     padding: 10,
     marginBottom: 5,
     backgroundColor: "white",
-    opacity:0.7
+    opacity:0.8
   },
   newCommentButton: {
     marginTop: 5,
     backgroundColor: "white",
-    opacity: 0.75
+    opacity: 0.9
   },
   commentItems: {
     marginVertical: 5

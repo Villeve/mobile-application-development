@@ -12,7 +12,6 @@ import {
   StatusBar
 } from "react-native";
 import axios from "axios";
-const images = require("../assets/images")
 
 class DashboardScreen extends React.Component {
   constructor(props) {
@@ -29,11 +28,7 @@ class DashboardScreen extends React.Component {
     await this.getUniversities();
     await this.setUserNameAndType();
   }
-  /*
-  async componentDidUpdate() {
-    await this.setUserNameAndType();
-  }
-*/
+
   async setUserNameAndType() {
     const role = await AsyncStorage.getItem("role");
     const name = await AsyncStorage.getItem("name");
@@ -93,6 +88,7 @@ class DashboardScreen extends React.Component {
     try {
       await AsyncStorage.multiRemove(["token", "name", "role"]);
       this.props.navigation.navigate("Auth");
+      //navigator.pop()
     } catch (error) {
       console.log(error);
     }
@@ -119,7 +115,9 @@ class DashboardScreen extends React.Component {
         headers: headers
       })
         .then(res => {
-          console.warn(res.data);
+          this.setState({
+            newUniversity: ""
+          });
           this.getUniversities();
         })
         .catch(error => {
@@ -129,7 +127,7 @@ class DashboardScreen extends React.Component {
     };
 
     return (
-      <ImageBackground source={require('../assets/uni'+2+'.jpg')} style={styles.container}>
+      <ImageBackground source={require('../assets/uni2.jpg')} style={styles.container}>
         <View style={styles.dashboardWrapper}>
           <TouchableOpacity style={styles.logoutButton}>
             <Text style={styles.logoutButtonText} onPress={() => this.logout()}>
@@ -156,14 +154,13 @@ class DashboardScreen extends React.Component {
               onPress={() => this.toggleFacultiesScreen(itemData.item._id)}
             >
               <View style={styles.listItem}>
-                <Text>{itemData.item.name}</Text>
+                <Text style={styles.listItemText}>{itemData.item.name}</Text>
                 {role === "1" && (
                     <TouchableOpacity style={styles.logoutButton}>
                     <Text style={styles.logoutButtonText} onPress={() => this.removeUniversity(itemData.item._id)}>
                       Remove
                     </Text>
                     </TouchableOpacity>
-                  
                 )}
               </View>
             </TouchableOpacity>
@@ -195,7 +192,7 @@ const styles = StyleSheet.create({
     fontWeight: "bold"
   },
   listItem: {
-    opacity: 0.8,
+    opacity: 0.75,
     padding: 10,
     marginVertical: 10,
     backgroundColor: "#ccc",
@@ -203,7 +200,11 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     flexDirection: "row",
     justifyContent: "space-between",
-    textAlignVertical: "center"
+    textAlignVertical: "center",
+  },
+  listItemText: {
+    fontSize: 16,
+    fontWeight: "bold"
   },
   inputContainer: {
     flexDirection: "row",

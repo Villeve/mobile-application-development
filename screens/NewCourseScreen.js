@@ -7,7 +7,8 @@ import {
   TouchableOpacity,
   FlatList,
   TextInput,
-  Button
+  Button,
+  ImageBackground
 } from "react-native";
 import axios from "axios";
 
@@ -69,7 +70,7 @@ class NewCourseScreen extends React.Component {
     const { name, code, scope, teacher, objectives } = this.state;
     
     return (
-        <View style={styles.container}>
+        <ImageBackground source={require('../assets/background6.jpg')} style={styles.container}>
         <View style={styles.formWrapper}>
           <View style={styles.formRow}>
             <TextInput
@@ -130,7 +131,7 @@ class NewCourseScreen extends React.Component {
             </Text>
           </TouchableOpacity>
         </View>
-      </View>
+      </ImageBackground>
     );
   }
 }

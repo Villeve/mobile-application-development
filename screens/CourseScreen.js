@@ -87,7 +87,7 @@ class CourseScreen extends React.Component {
     const { courses, newCourse, role } = this.state;
     
     return (
-      <ImageBackground source={require('../assets/cou1.jpg')} style={styles.container}>
+      <ImageBackground source={require('../assets/background6.jpg')} style={styles.container}>
         {role === "1" && <Button title="New Course" onPress={() => this.toggleNewCourseScreen(this.props.navigation.state.params.facultyId)}/>}
         <FlatList
             data={courses}
@@ -95,7 +95,7 @@ class CourseScreen extends React.Component {
             renderItem={itemData => (
             <TouchableOpacity onPress={() => this.toggleCourseInfoScreen(itemData.item)}>
             <View style={styles.listItem}>
-                <Text>{itemData.item.name}</Text>
+                <Text style={styles.listItemText}>{itemData.item.name}</Text>
                 {role === "1" &&
                 <TouchableOpacity style={styles.removeButton}>
                 <Text style={styles.removeButtonText} onPress={() => this.removeCourse(itemData.item._id)}>
@@ -136,6 +136,10 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
     textAlignVertical: "center",
     opacity: 0.8
+  },
+  listItemText: {
+    fontSize: 16,
+    fontWeight: "bold"
   },
   inputContainer: {
     flexDirection: "row",

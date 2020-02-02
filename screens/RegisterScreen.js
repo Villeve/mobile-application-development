@@ -5,7 +5,8 @@ import {
   StyleSheet,
   TextInput,
   TouchableOpacity,
-  AsyncStorage
+  AsyncStorage,
+  ImageBackground
 } from "react-native";
 import axios from "axios";
 
@@ -74,7 +75,7 @@ class RegisterScreen extends React.Component {
   render() {
     const { username, email, password, password2, loading } = this.state;
     return (
-      <View style={styles.container}>
+      <ImageBackground source={require('../assets/background4.jpg')} style={styles.container}>
         <View style={styles.formWrapper}>
           <View style={styles.formRow}>
             <TextInput
@@ -128,7 +129,7 @@ class RegisterScreen extends React.Component {
             </Text>
           </TouchableOpacity>
         </View>
-      </View>
+      </ImageBackground>
     );
   }
 }

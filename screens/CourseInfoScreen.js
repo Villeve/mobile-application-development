@@ -3,7 +3,8 @@ import {
   View,
   Text,
   StyleSheet,
-  ImageBackground
+  ImageBackground,
+  ScrollView
 } from "react-native";
 import Comment from "../components/Comment"
 
@@ -19,7 +20,10 @@ class CourseInfoScreen extends React.Component {
   render() {
     
     return (
-      <ImageBackground source={require('../assets/info2.png')} style={styles.container}>
+      <ImageBackground source={require('../assets/background7.jpg')} style={styles.container}>
+          <ScrollView>
+
+          
           <View style={styles.infoContainer}>
         <Text style={styles.itemHeader}>Name:</Text>
         <View style={styles.listItem}>
@@ -42,6 +46,9 @@ class CourseInfoScreen extends React.Component {
             <Text>{this.state.courseInfo.objectives}</Text>
         </View>
           </View>
+          </ScrollView>
+
+
         <Comment courseId={this.state.courseInfo._id}/>
       </ImageBackground>
     );

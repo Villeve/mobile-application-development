@@ -97,6 +97,9 @@ class FacultyScreen extends React.Component {
         headers: headers
         })
         .then(res => {
+            this.setState({
+                newFaculty: ""
+            })
             this.getFaculties()
         })
         .catch(error => {
@@ -105,7 +108,7 @@ class FacultyScreen extends React.Component {
         });
     }
     return (
-      <ImageBackground source={require('../assets/fac4.jpg')} style={styles.container}>
+      <ImageBackground source={require('../assets/background7.jpg')} style={styles.container}>
         {role === "1" && 
          <View style={styles.inputContainer}>
          <TextInput
@@ -124,7 +127,7 @@ class FacultyScreen extends React.Component {
             renderItem={itemData => (
             <TouchableOpacity onPress={() => this.toggleCourseScreen(itemData.item._id)}>
             <View style={styles.listItem}>
-                <Text>{itemData.item.name}</Text>
+                <Text style={styles.listItemText}>{itemData.item.name}</Text>
                 {role === "1" && 
                 <TouchableOpacity style={styles.removeButton}>
                     <Text style={styles.removeButtonText} onPress={() => this.removeFaculty(itemData.item._id)}>
@@ -164,7 +167,11 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-between",
     textAlignVertical: "center",
-    opacity: 0.8
+    opacity: 0.75
+  },
+  listItemText: {
+    fontSize: 16,
+    fontWeight: "bold"
   },
   input: {
     width: "100%",
