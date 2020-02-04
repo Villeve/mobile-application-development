@@ -27,44 +27,49 @@ class RegisterScreen extends React.Component {
 
   register() {
     const { username, email, password, password2 } = this.state;
-    if(username && password) {
-        const req = {
-            name: username,
-            email: email,
-            password: password,
-            password2: password2
-          };
-          this.setState({
-              loading: true
-          })
-          //https://reqres.in/api/login
-          axios.post("https://mobile-app-backend-uva.herokuapp.com/api/users/register", req).then(
-            res => {
-              this.setState({
-                  loading: false
-              })
-              AsyncStorage.setItem("token", res.data.token)
-              this.props.navigation.navigate("Auth");
-            },
-            err => {
-              console.warn(err)
-              this.setState({
-                  loading: false
-              })
-              alert("Error While Creating Account - Try Again");
-            }
-          );
+    if (username && password) {
+      const req = {
+        name: username,
+        email: email,
+        password: password,
+        password2: password2
+      };
+      this.setState({
+        loading: true
+      });
+      axios
+        .post(
+          "https://mobile-app-backend-uva.herokuapp.com/api/users/register",
+          req
+        )
+        .then(
+          res => {
+            this.setState({
+              loading: false
+            });
+            AsyncStorage.setItem("token", res.data.token);
+            this.props.navigation.navigate("Auth");
+          },
+          err => {
+            console.warn(err);
+            this.setState({
+              loading: false
+            });
+            alert("Error While Creating Account - Try Again");
+          }
+        );
+    } else {
+      alert("Fill Every Field");
     }
-    else {
-        alert("Fill Every Field")
-    }
-    
   }
 
   render() {
     const { username, email, password, password2, loading } = this.state;
     return (
-      <ImageBackground source={require('../assets/brickwall.jpg')} style={styles.container}>
+      <ImageBackground
+        source={require("../assets/brickwall.jpg")}
+        style={styles.container}
+      >
         <View style={styles.formWrapper}>
           <View style={styles.formRow}>
             <TextInput
@@ -105,10 +110,10 @@ class RegisterScreen extends React.Component {
             />
           </View>
           <TouchableOpacity
-          activeOpacity={0.8}
+            activeOpacity={0.8}
             style={{
-                ...styles.button,
-                backgroundColor: loading ? "#ddd" : "blue"
+              ...styles.button,
+              backgroundColor: loading ? "#ddd" : "blue"
             }}
             onPress={() => this.register()}
             disabled={loading}

@@ -8,8 +8,7 @@ import {
   FlatList,
   TextInput,
   Button,
-  ImageBackground,
-  StatusBar
+  ImageBackground
 } from "react-native";
 import axios from "axios";
 
@@ -19,7 +18,7 @@ class DashboardScreen extends React.Component {
     this.state = {
       universities: [],
       newUniversity: "",
-      role: this.props.navigation.state.params.role
+      role: "this.props.navigation.state.params.role"
     };
   }
 
@@ -78,7 +77,7 @@ class DashboardScreen extends React.Component {
       await AsyncStorage.multiRemove(["token", "name", "role"]);
       this.props.navigation.navigate("Auth");
     } catch (error) {
-      console.log(error);
+      console.warn(error);
     }
   }
 
@@ -115,7 +114,10 @@ class DashboardScreen extends React.Component {
     };
 
     return (
-      <ImageBackground source={require('../assets/uni2.jpg')} style={styles.container}>
+      <ImageBackground
+        source={require("../assets/uni2.jpg")}
+        style={styles.container}
+      >
         <View style={styles.dashboardWrapper}>
           <TouchableOpacity style={styles.logoutButton}>
             <Text style={styles.logoutButtonText} onPress={() => this.logout()}>
@@ -131,7 +133,7 @@ class DashboardScreen extends React.Component {
               onChangeText={textAdded}
               value={this.state.newUniversity}
             />
-                <Button style={styles.newUniButton} title="ADD" onPress={addUniversity} />
+            <Button title="ADD" onPress={addUniversity} />
           </View>
         )}
         <FlatList
@@ -144,11 +146,14 @@ class DashboardScreen extends React.Component {
               <View style={styles.listItem}>
                 <Text style={styles.listItemText}>{itemData.item.name}</Text>
                 {role === "1" && (
-                    <TouchableOpacity style={styles.logoutButton}>
-                    <Text style={styles.logoutButtonText} onPress={() => this.removeUniversity(itemData.item._id)}>
+                  <TouchableOpacity style={styles.logoutButton}>
+                    <Text
+                      style={styles.logoutButtonText}
+                      onPress={() => this.removeUniversity(itemData.item._id)}
+                    >
                       Remove
                     </Text>
-                    </TouchableOpacity>
+                  </TouchableOpacity>
                 )}
               </View>
             </TouchableOpacity>
@@ -163,11 +168,11 @@ export default DashboardScreen;
 
 const styles = StyleSheet.create({
   container: {
-    height: "100%",
+    height: "100%"
   },
   dashboardWrapper: {
     padding: 10,
-    justifyContent: "space-between",
+    justifyContent: "space-between"
   },
   logoutButton: {
     backgroundColor: "red",
@@ -188,7 +193,7 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     flexDirection: "row",
     justifyContent: "space-between",
-    textAlignVertical: "center",
+    textAlignVertical: "center"
   },
   listItemText: {
     fontSize: 16,
@@ -199,20 +204,13 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
     alignItems: "center",
     padding: 10
-    },
-    input: {
-        width: "80%",
-        borderBottomColor: "black",
-        borderWidth: 1,
-        padding: 10,
-        backgroundColor: "white",
-        opacity: 0.8
-        
-    },
-  newUniButton: {
-    
   },
-  removeButton: {
-      color: "red"
+  input: {
+    width: "80%",
+    borderBottomColor: "black",
+    borderWidth: 1,
+    padding: 10,
+    backgroundColor: "white",
+    opacity: 0.8
   }
 });

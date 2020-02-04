@@ -25,52 +25,54 @@ class LoginScreen extends React.Component {
 
   login() {
     const { email, password } = this.state;
-    if(email && password) {
-        const req = {
-            email: email,
-            password: password
-          };
-          this.setState({
-              loading: true
-          })
-          axios.post("https://mobile-app-backend-uva.herokuapp.com/api/users/login", req).then(
-            res => {
-              this.setState({
-                  loading: false,
-                  email: "",
-                  password: ""
-              })
-              console.log("LOGGING IN", res.data.name)
-              var role = res.data.role
-              AsyncStorage.setItem("token", res.data.token)
-              AsyncStorage.setItem("name", res.data.name)
-              AsyncStorage.setItem("role", role)
-            .then(
-                res => {
-                    this.props.navigation.navigate("App", {role: role});
-                }
-            ) 
-            },
-            err => {
-              console.warn(err)
-              this.setState({
-                  loading: false,
-                  password: ""
-              })
-              alert("Wrong email or password");
-            }
-          );
+    if (email && password) {
+      const req = {
+        email: email,
+        password: password
+      };
+      this.setState({
+        loading: true
+      });
+      axios
+        .post(
+          "https://mobile-app-backend-uva.herokuapp.com/api/users/login",
+          req
+        )
+        .then(
+          res => {
+            this.setState({
+              loading: false,
+              email: "",
+              password: ""
+            });
+            var role = res.data.role;
+            AsyncStorage.setItem("token", res.data.token);
+            AsyncStorage.setItem("name", res.data.name);
+            AsyncStorage.setItem("role", role).then(res => {
+              this.props.navigation.navigate("App", { role: role });
+            });
+          },
+          err => {
+            console.warn(err);
+            this.setState({
+              loading: false,
+              password: ""
+            });
+            alert("Wrong email or password");
+          }
+        );
+    } else {
+      alert("Enter email and password");
     }
-    else {
-        alert("Enter email and password")
-    }
-    
   }
 
   render() {
     const { email, password, loading } = this.state;
     return (
-      <ImageBackground source={require('../assets/brickwall.jpg')} style={styles.container}>
+      <ImageBackground
+        source={require("../assets/brickwall.jpg")}
+        style={styles.container}
+      >
         <View style={styles.formWrapper}>
           <Text style={styles.title}>Welcome to the great University App</Text>
           <View style={styles.formRow}>
@@ -93,10 +95,10 @@ class LoginScreen extends React.Component {
             />
           </View>
           <TouchableOpacity
-          activeOpacity={0.8}
+            activeOpacity={0.8}
             style={{
-                ...styles.button,
-                backgroundColor: loading ? "#ddd" : "blue"
+              ...styles.button,
+              backgroundColor: loading ? "#ddd" : "blue"
             }}
             onPress={() => this.login()}
             disabled={loading}
@@ -105,11 +107,12 @@ class LoginScreen extends React.Component {
               {loading ? "Loading..." : "Sign in"}
             </Text>
           </TouchableOpacity>
-          <Text style={styles.registerText}
+          <Text
+            style={styles.registerText}
             onPress={() => this.props.navigation.navigate("Register")}
           >
-              Click to Register
-            </Text>
+            Click to Register
+          </Text>
         </View>
       </ImageBackground>
     );

@@ -4,7 +4,6 @@ import {
   Button,
   TextInput,
   StyleSheet,
-  Modal,
   Text,
   FlatList,
   TouchableOpacity,
@@ -70,7 +69,7 @@ const Comment = props => {
       headers: headers
     })
       .then(res => {
-        setEnteredComment("")
+        setEnteredComment("");
         fetchComments();
       })
       .catch(error => {
@@ -151,7 +150,7 @@ const styles = StyleSheet.create({
     padding: 10,
     marginBottom: 5,
     backgroundColor: "white",
-    opacity:0.8
+    opacity: 0.8
   },
   newCommentButton: {
     marginTop: 5,

@@ -13,132 +13,143 @@ import {
 import axios from "axios";
 
 class FacultyScreen extends React.Component {
-    constructor(props) {
-        super(props)
-        this.state = {
-            faculties: [],
-            newFaculty: "",
-            role: "0"
-          };
-    }
-    async componentDidMount() {
-        await this.getFaculties()
-        await this.setUserRole()
-    }
-    async setUserRole() {
-        const role = await AsyncStorage.getItem("role");
+  constructor(props) {
+    super(props);
+    this.state = {
+      faculties: [],
+      newFaculty: "",
+      role: "0"
+    };
+  }
+  async componentDidMount() {
+    await this.getFaculties();
+    await this.setUserRole();
+  }
+  async setUserRole() {
+    const role = await AsyncStorage.getItem("role");
+    this.setState({
+      role: role
+    });
+  }
+  async getFaculties() {
+    const token = await AsyncStorage.getItem("token");
+    const headers = {
+      Authorization: "Bearer " + token
+    };
+    axios({
+      method: "GET",
+      url:
+        "https://mobile-app-backend-uva.herokuapp.com/api/faculties/" +
+        this.props.navigation.state.params.universityId,
+      headers: headers
+    })
+      .then(res => {
         this.setState({
-            role: role
-        })
-    }
-    async getFaculties() {
-        const token = await AsyncStorage.getItem("token");
-        const headers = {
-          Authorization: "Bearer " + token
-        };
-        axios({
-          method: "GET",
-          url: "https://mobile-app-backend-uva.herokuapp.com/api/faculties/" + this.props.navigation.state.params.universityId,
-          headers: headers
-        })
-          .then(res => {
-            this.setState({
-              faculties: res.data
-            });
-          })
-          .catch(error => {
-            console.warn(error);
-            this.setState({
-              faculties: []
-            });
-            alert("Error While fetching data");
-          });
-      }
-      async removeFaculty(facultyId) {
-        const token = await AsyncStorage.getItem("token");
-        const headers = {
-          Authorization: "Bearer " + token
-        };
-        axios({
-          method: "DELETE",
-          url: "https://mobile-app-backend-uva.herokuapp.com/api/faculties/" + facultyId,
-          headers: headers
-        })
-        .then(res => {
-            this.getFaculties()
-          })
-          .catch(error => {
-            alert("Error While Removing Faculty");
-          });
-      }
-      toggleCourseScreen(facultyId) {
-        this.props.navigation.navigate("Courses", {facultyId: facultyId});
-    }
+          faculties: res.data
+        });
+      })
+      .catch(error => {
+        console.warn(error);
+        this.setState({
+          faculties: []
+        });
+        alert("Error While fetching data");
+      });
+  }
+  async removeFaculty(facultyId) {
+    const token = await AsyncStorage.getItem("token");
+    const headers = {
+      Authorization: "Bearer " + token
+    };
+    axios({
+      method: "DELETE",
+      url:
+        "https://mobile-app-backend-uva.herokuapp.com/api/faculties/" +
+        facultyId,
+      headers: headers
+    })
+      .then(res => {
+        this.getFaculties();
+      })
+      .catch(error => {
+        alert("Error While Removing Faculty");
+      });
+  }
+  toggleCourseScreen(facultyId) {
+    this.props.navigation.navigate("Courses", { facultyId: facultyId });
+  }
 
   render() {
     const { faculties, newFaculty, role } = this.state;
     const textAdded = text =>
-        this.setState({
-            newFaculty: text
-    });
+      this.setState({
+        newFaculty: text
+      });
     const addFaculty = async () => {
-        const token = await AsyncStorage.getItem("token");
-        const headers = {
+      const token = await AsyncStorage.getItem("token");
+      const headers = {
         Authorization: "Bearer " + token
-        };
-        const req = {
-            name: newFaculty,
-            university: this.props.navigation.state.params.universityId
-          };
-        axios({
+      };
+      const req = {
+        name: newFaculty,
+        university: this.props.navigation.state.params.universityId
+      };
+      axios({
         method: "POST",
-        url: "https://mobile-app-backend-uva.herokuapp.com/api/faculties", 
+        url: "https://mobile-app-backend-uva.herokuapp.com/api/faculties",
         data: req,
         headers: headers
-        })
+      })
         .then(res => {
-            this.setState({
-                newFaculty: ""
-            })
-            this.getFaculties()
+          this.setState({
+            newFaculty: ""
+          });
+          this.getFaculties();
         })
         .catch(error => {
-            console.warn(error);
-            alert("Error while adding new faculty");
+          console.warn(error);
+          alert("Error while adding new faculty");
         });
-    }
+    };
     return (
-      <ImageBackground source={require('../assets/background7.jpg')} style={styles.container}>
-        {role === "1" && 
-         <View style={styles.inputContainer}>
-         <TextInput
-           placeholder="Add new faculty"
-           style={styles.input}
-           onChangeText={textAdded}
-           value={this.state.newFaculty}
-         />
-         <Button title="ADD" onPress={addFaculty}/>
-       </View>
-      }
-      
+      <ImageBackground
+        source={require("../assets/background7.jpg")}
+        style={styles.container}
+      >
+        {role === "1" && (
+          <View style={styles.inputContainer}>
+            <TextInput
+              placeholder="Add new faculty"
+              style={styles.input}
+              onChangeText={textAdded}
+              value={this.state.newFaculty}
+            />
+            <Button title="ADD" onPress={addFaculty} />
+          </View>
+        )}
         <FlatList
-            data={faculties}
-            keyExtractor={item => item._id}
-            renderItem={itemData => (
-            <TouchableOpacity onPress={() => this.toggleCourseScreen(itemData.item._id)}>
-            <View style={styles.listItem}>
+          data={faculties}
+          keyExtractor={item => item._id}
+          renderItem={itemData => (
+            <TouchableOpacity
+              onPress={() => this.toggleCourseScreen(itemData.item._id)}
+            >
+              <View style={styles.listItem}>
                 <Text style={styles.listItemText}>{itemData.item.name}</Text>
-                {role === "1" && 
-                <TouchableOpacity style={styles.removeButton}>
-                    <Text style={styles.removeButtonText} onPress={() => this.removeFaculty(itemData.item._id)}>
+                {role === "1" && (
+                  <TouchableOpacity style={styles.removeButton}>
+                    <Text
+                      style={styles.removeButtonText}
+                      onPress={() => this.removeFaculty(itemData.item._id)}
+                    >
                       Remove
                     </Text>
-                    </TouchableOpacity>
-                }
-            </View>
+                  </TouchableOpacity>
+                )}
+              </View>
             </TouchableOpacity>
-            )}
-      />
+          )}
+        />
       </ImageBackground>
     );
   }
@@ -149,14 +160,6 @@ export default FacultyScreen;
 const styles = StyleSheet.create({
   container: {
     height: "100%"
-  },
-  dashboardWrapper: {
-    textAlign: "center"
-  },
-  userText: {
-    fontSize: 30,
-    fontWeight: "bold",
-    marginBottom: 10
   },
   listItem: {
     padding: 10,
