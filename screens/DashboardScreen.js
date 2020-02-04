@@ -18,7 +18,7 @@ class DashboardScreen extends React.Component {
     this.state = {
       universities: [],
       newUniversity: "",
-      role: "this.props.navigation.state.params.role"
+      role: this.props.navigation.state.params.role
     };
   }
 
