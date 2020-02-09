@@ -10,12 +10,14 @@ import {
   AsyncStorage
 } from "react-native";
 import axios from "axios";
+import Spinner from 'react-native-loading-spinner-overlay';
 
 const Comment = props => {
   const [enteredComment, setEnteredComment] = useState("");
   const [role, setRole] = useState("0");
   const [username, setUsername] = useState("");
   const [comments, setComments] = useState([]);
+  const [loading, setLoading] = useState(true);
   const textAdded = text => setEnteredComment(text);
 
   useEffect(() => {
@@ -44,6 +46,7 @@ const Comment = props => {
         headers: headers
       });
       setComments(res.data);
+      setLoading(false);
     } catch (error) {
       console.warn(error);
       setComments([]);
@@ -51,6 +54,7 @@ const Comment = props => {
     }
   };
   const addComment = async () => {
+    setLoading(true);
     const username = await AsyncStorage.getItem("name");
     const token = await AsyncStorage.getItem("token");
     const headers = {
@@ -77,7 +81,8 @@ const Comment = props => {
         alert("Error while adding new comment");
       });
   };
-  const removeCourse = async commentId => {
+  const removeComment = async commentId => {
+    setLoading(true);
     const token = await AsyncStorage.getItem("token");
     const headers = {
       Authorization: "Bearer " + token
@@ -100,6 +105,11 @@ const Comment = props => {
 
   return (
     <View style={styles.container}>
+      <Spinner
+          visible={loading}
+          textContent={'Loading...'}
+          textStyle={styles.spinnerTextStyle}
+      />
       <View style={styles.inputContainer}>
         <TextInput
           placeholder="Add comment"
@@ -123,7 +133,7 @@ const Comment = props => {
               <TouchableOpacity style={styles.removeButton}>
                 <Text
                   style={styles.removeButtonText}
-                  onPress={() => removeCourse(itemData.item._id)}
+                  onPress={() => removeComment(itemData.item._id)}
                 >
                   Remove
                 </Text>
@@ -139,6 +149,9 @@ const Comment = props => {
 const styles = StyleSheet.create({
   container: {
     height: "55%"
+  },
+  spinnerTextStyle: {
+    color: '#FFF'
   },
   inputContainer: {
     flexDirection: "row"

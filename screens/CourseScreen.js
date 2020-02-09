@@ -10,6 +10,7 @@ import {
   ImageBackground
 } from "react-native";
 import axios from "axios";
+import Spinner from 'react-native-loading-spinner-overlay';
 
 class CourseScreen extends React.Component {
   constructor(props) {
@@ -17,7 +18,8 @@ class CourseScreen extends React.Component {
     this.state = {
       courses: [],
       newCourse: {},
-      role: "0"
+      role: "0",
+      loading: true
     };
   }
   async componentDidMount() {
@@ -47,7 +49,8 @@ class CourseScreen extends React.Component {
         headers: headers
       });
       this.setState({
-        courses: res.data
+        courses: res.data,
+        loading: false
       });
     } catch (error) {
       console.warn(error);
@@ -58,6 +61,9 @@ class CourseScreen extends React.Component {
     }
   }
   async removeCourse(courseId) {
+    this.setState({
+      loading: true
+    });
     const token = await AsyncStorage.getItem("token");
     const headers = {
       Authorization: "Bearer " + token
@@ -84,13 +90,18 @@ class CourseScreen extends React.Component {
   }
 
   render() {
-    const { courses, role } = this.state;
+    const { courses, role, loading } = this.state;
 
     return (
       <ImageBackground
         source={require("../assets/background6.jpg")}
         style={styles.container}
       >
+        <Spinner
+          visible={loading}
+          textContent={'Loading...'}
+          textStyle={styles.spinnerTextStyle}
+        />
         {role === "1" && (
           <Button
             title="New Course"
@@ -134,6 +145,9 @@ export default CourseScreen;
 const styles = StyleSheet.create({
   container: {
     height: "100%"
+  },
+  spinnerTextStyle: {
+    color: '#FFF'
   },
   listItem: {
     padding: 10,

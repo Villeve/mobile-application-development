@@ -49,7 +49,7 @@ class LoginScreen extends React.Component {
             AsyncStorage.setItem("token", res.data.token);
             AsyncStorage.setItem("name", res.data.name);
             AsyncStorage.setItem("role", role).then(res => {
-              this.props.navigation.navigate("App", { role: role });
+              this.props.navigation.navigate("App");
             });
           },
           err => {

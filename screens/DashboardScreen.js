@@ -11,6 +11,7 @@ import {
   ImageBackground
 } from "react-native";
 import axios from "axios";
+import Spinner from 'react-native-loading-spinner-overlay';
 
 class DashboardScreen extends React.Component {
   constructor(props) {
@@ -18,12 +19,19 @@ class DashboardScreen extends React.Component {
     this.state = {
       universities: [],
       newUniversity: "",
-      role: this.props.navigation.state.params.role
+      role: "0",
+      loading: true
     };
   }
 
   async componentDidMount() {
     await this.getUniversities();
+  }
+
+  async componentDidUpdate() {
+    this.setState({
+      role: await AsyncStorage.getItem("role")
+    })
   }
 
   async getUniversities() {
@@ -38,7 +46,8 @@ class DashboardScreen extends React.Component {
     })
       .then(res => {
         this.setState({
-          universities: res.data
+          universities: res.data,
+          loading: false
         });
       })
       .catch(error => {
@@ -50,6 +59,9 @@ class DashboardScreen extends React.Component {
       });
   }
   async removeUniversity(universityId) {
+    this.setState({
+      loading: true
+    });
     const token = await AsyncStorage.getItem("token");
     const headers = {
       Authorization: "Bearer " + token
@@ -82,12 +94,15 @@ class DashboardScreen extends React.Component {
   }
 
   render() {
-    const { universities, newUniversity, role } = this.state;
+    const { universities, newUniversity, role, loading } = this.state;
     const textAdded = text =>
       this.setState({
         newUniversity: text
       });
     const addUniversity = async () => {
+      this.setState({
+        loading: true
+      });
       const token = await AsyncStorage.getItem("token");
       const headers = {
         Authorization: "Bearer " + token
@@ -112,12 +127,16 @@ class DashboardScreen extends React.Component {
           alert("Error while adding new university");
         });
     };
-
     return (
       <ImageBackground
         source={require("../assets/uni2.jpg")}
         style={styles.container}
       >
+        <Spinner
+          visible={loading}
+          textContent={'Loading...'}
+          textStyle={styles.spinnerTextStyle}
+        />
         <View style={styles.dashboardWrapper}>
           <TouchableOpacity style={styles.logoutButton}>
             <Text style={styles.logoutButtonText} onPress={() => this.logout()}>
@@ -136,6 +155,7 @@ class DashboardScreen extends React.Component {
             <Button title="ADD" onPress={addUniversity} />
           </View>
         )}
+
         <FlatList
           data={universities}
           keyExtractor={item => item._id}
@@ -159,6 +179,7 @@ class DashboardScreen extends React.Component {
             </TouchableOpacity>
           )}
         />
+
       </ImageBackground>
     );
   }
@@ -169,6 +190,9 @@ export default DashboardScreen;
 const styles = StyleSheet.create({
   container: {
     height: "100%"
+  },
+  spinnerTextStyle: {
+    color: '#FFF'
   },
   dashboardWrapper: {
     padding: 10,

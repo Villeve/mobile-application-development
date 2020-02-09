@@ -11,6 +11,7 @@ import {
   ImageBackground
 } from "react-native";
 import axios from "axios";
+import Spinner from 'react-native-loading-spinner-overlay';
 
 class FacultyScreen extends React.Component {
   constructor(props) {
@@ -18,7 +19,8 @@ class FacultyScreen extends React.Component {
     this.state = {
       faculties: [],
       newFaculty: "",
-      role: "0"
+      role: "0",
+      loading: true
     };
   }
   async componentDidMount() {
@@ -45,7 +47,8 @@ class FacultyScreen extends React.Component {
     })
       .then(res => {
         this.setState({
-          faculties: res.data
+          faculties: res.data,
+          loading: false
         });
       })
       .catch(error => {
@@ -57,6 +60,9 @@ class FacultyScreen extends React.Component {
       });
   }
   async removeFaculty(facultyId) {
+    this.setState({
+      loading: true
+    });
     const token = await AsyncStorage.getItem("token");
     const headers = {
       Authorization: "Bearer " + token
@@ -80,12 +86,15 @@ class FacultyScreen extends React.Component {
   }
 
   render() {
-    const { faculties, newFaculty, role } = this.state;
+    const { faculties, newFaculty, role, loading } = this.state;
     const textAdded = text =>
       this.setState({
         newFaculty: text
       });
     const addFaculty = async () => {
+      this.setState({
+        loading: true
+      });
       const token = await AsyncStorage.getItem("token");
       const headers = {
         Authorization: "Bearer " + token
@@ -116,6 +125,11 @@ class FacultyScreen extends React.Component {
         source={require("../assets/background7.jpg")}
         style={styles.container}
       >
+        <Spinner
+          visible={loading}
+          textContent={'Loading...'}
+          textStyle={styles.spinnerTextStyle}
+        />
         {role === "1" && (
           <View style={styles.inputContainer}>
             <TextInput
@@ -160,6 +174,9 @@ export default FacultyScreen;
 const styles = StyleSheet.create({
   container: {
     height: "100%"
+  },
+  spinnerTextStyle: {
+    color: '#FFF'
   },
   listItem: {
     padding: 10,
