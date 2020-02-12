@@ -23,6 +23,7 @@ class LoginScreen extends React.Component {
     });
   }
 
+  // Check the credentials are valid and store user information
   login() {
     const { email, password } = this.state;
     if (email && password) {
