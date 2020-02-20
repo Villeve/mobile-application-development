@@ -21,7 +21,7 @@ The frontend is mostly built out of react native screens and it uses the AppNavi
 >https://github.com/Villeve/mobile-application-development
 
 ## Backend
-The backend uses token based authentication (passport-jwt, express-jwt) and mongoose for data modeling.
+The backend uses token based authentication (passport-jwt, express-jwt) and mongoose for data modeling. The forms of the application do not have very implicit validators so they can be rather easily exploited. That is definitely something to improve. Also, new features such as a rating system for the courses and a search could be implemented later.
 
 ### How to Run
     npm start
